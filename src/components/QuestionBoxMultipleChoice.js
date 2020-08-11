@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const QuestionBox = ({question, options, selected}) => {
+const QuestionBoxMultipleChoice = ({question, options, selected}) => {
     const [answer, setAnswer] = useState(options);
 
     return(
@@ -20,4 +20,4 @@ const QuestionBox = ({question, options, selected}) => {
     );
 };
 
-export default QuestionBox;
+export default QuestionBoxMultipleChoice;

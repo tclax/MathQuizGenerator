@@ -17,7 +17,7 @@
   bottom: 0px;
   left: 0px;
   right: 0px;
-  margin: auto;
+  margin: 5;
 }
 
 .title {
@@ -65,18 +65,16 @@
 }
 
 .score {
-  position: absolute;
+  position: relative;
   width: 1024px;
   font-size: 3em;
-  top: 250px;
   text-align: center;
 }
 
 .playBtn {
-  position: absolute;
+  position: relative;
   font-size: 1.4em;
   padding: 10px;
-  top: 350px;
   background-color: rgb(46, 182, 46);
   color: rgb(255, 255, 255);
   width: 150px;
@@ -86,3 +84,14 @@
   outline: none;
   cursor: pointer;
 }
+
+.tableScore {
+    position: relative;
+    width: 500px;
+    font-size: 3em;
+    text-align: center;
+}
+
+.incorrectAnswer { background-color: red; }
+
+.correctAnswer { background-color: white; }
