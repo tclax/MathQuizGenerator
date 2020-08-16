@@ -16,10 +16,10 @@ const Result = ({score, questionCount, answerLog, playAgain}) => {
                     <th>Your Answer</th>
                 </tr>
                 {answerLog.map(({question, answer, correctAnswer, isCorrect}) => (
-                <tr className={isCorrect ? 'correctAnswer' : 'incorrectAnswer'}>
+                <tr className={isCorrect.valueOf() ? 'correctAnswer' : 'incorrectAnswer'}>
                     <td>{question}</td>
-                    <td>{answer}</td>
                     <td>{correctAnswer}</td>
+                    <td>{answer}</td>
                 </tr>
                 ))}
             </table>
