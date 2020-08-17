@@ -11,8 +11,7 @@ class MathQuiz extends Component {
         questionBank: [],
         score: 0,
         responses: 0,
-        gradeLevel: 0,
-        questionCount: 4,
+        questionCount: 10,
         answerLog: [],
         quizSetup: false,
         availableGradeLevels: [],
@@ -33,24 +32,26 @@ class MathQuiz extends Component {
         var operation;
         var answerVariance;
         var totalAnswerOptions = 4;
+
         for(i = 0; i < this.state.questionCount; i++){
             var options = [];
 
             switch(gradeLevel) {
                 case "K":
-                    answerVariance = 5;
-                    minAnswer = 1;
-                    maxAnswer = 10;
-                    operations = ['+', '-'];
-                    operation = operations[Math.floor(Math.random() * operations.length)];
-                    answer = Math.floor((Math.random() * maxAnswer) + minAnswer);
-                    operand1 = Math.floor((Math.random() * answer) + minAnswer);
-                    operand2 = this.getOperand(answer, operand1, operation);
-                    
-                    console.log('answer: ' + answer.toString() + ' operand1: ' + operand1.toString() + ' operand2: ' + operand2.toString()); 
+                    //Kindergarten question rules: Add and subtract from 0 - 10
+                    do {
+                        answerVariance = 5;
+                        minAnswer = 1;
+                        maxAnswer = 10;
+                        operations = ['+', '-'];
+                        operation = operations[Math.floor(Math.random() * operations.length)];
+                        answer = Math.floor((Math.random() * maxAnswer) + minAnswer);
+                        operand1 = Math.floor((Math.random() * answer) + minAnswer);
+                        operand2 = this.getOperand(answer, operand1, operation);
+                    } while(operand1 < minAnswer && operand1 > maxAnswer && operand2 < minAnswer && operand2 > maxAnswer);
+
                     //Generate options and add answer to the answers array
                     var optionsCount = 0;
-                    console.log('looking for options for: ' + answer.toString());
                     while(optionsCount < totalAnswerOptions - 1){
                         var option = answer + Math.floor((Math.random() * answerVariance) + 1);
                         if(!options.includes(option)){
@@ -59,19 +60,70 @@ class MathQuiz extends Component {
                             optionsCount++;
                         }
                     }
-                    options.push(answer.toString());
 
-                    //add the question to the qBank
-                    qBank.push({
-                        question: operand2.toString() + operation + operand1.toString(),
-                        answers: options.sort(() => 0.5 - Math.random()).slice(0, totalAnswerOptions),
-                        correct: answer.toString(),
-                        questionId: i.toString(),
-                    });
+                    options.push(answer.toString());
                     break;
                 case "1":
+                    //Grade 1 question rules: Add from 0 - 100, subtract 10s from 0 - 10
+                    do {
+                        answerVariance = 10;
+                        minAnswer = 1;
+                        maxAnswer = 100;
+                        operations = ['+', '-'];
+                        operation = operations[Math.floor(Math.random() * operations.length)];
+
+                        if(operation === '+') {
+                            answer = Math.floor((Math.random() * maxAnswer) + minAnswer);
+                            operand1 = Math.floor((Math.random() * answer) + minAnswer);
+                            operand2 = this.getOperand(answer, operand1, operation);
+                        }
+                        else {
+                            answer = Math.floor((Math.random() * 9)) * 10;
+                            operand1 = Math.floor((Math.random() * (answer / 10))) * 10;
+                            operand2 = this.getOperand(answer, operand1, operation);
+                        }
+                        
+                    } while(operand1 < minAnswer && operand1 > maxAnswer && operand2 < minAnswer && operand2 > maxAnswer);
+
+                    //Generate options and add answer to the answers array
+                    var optionsCount = 0;
+                    while(optionsCount < totalAnswerOptions - 1){
+                        var option = answer + Math.floor((Math.random() * answerVariance) + 1);
+                        if(!options.includes(option)){
+                            console.log('adding ' + option.toString());
+                            options.push(option);
+                            optionsCount++;
+                        }
+                    }
+
+                    options.push(answer.toString());
                     break;
                 case "2":
+                    //Grade 2 question rules: Add and subtract from 0 - 10
+                    do {
+                        answerVariance = 25;
+                        minAnswer = 1;
+                        maxAnswer = 1000;
+                        operations = ['+', '-'];
+                        operation = operations[Math.floor(Math.random() * operations.length)];
+                        answer = Math.floor((Math.random() * maxAnswer) + minAnswer);
+                        operand1 = Math.floor((Math.random() * answer) + minAnswer);
+                        operand2 = this.getOperand(answer, operand1, operation);
+                    } while(operand1 < minAnswer && operand1 > maxAnswer && operand2 < minAnswer && operand2 > maxAnswer);
+
+                    //Generate options and add answer to the answers array
+                    var optionsCount = 0;
+                    while(optionsCount < totalAnswerOptions - 1){
+                        var option = answer + Math.floor((Math.random() * answerVariance) + 1);
+                        if(!options.includes(option)){
+                            console.log('adding ' + option.toString());
+                            options.push(option);
+                            optionsCount++;
+                        }
+                    }
+
+                    options.push(answer.toString());
+                    break;
                     break;
                 case "3":
                     break;
@@ -80,6 +132,17 @@ class MathQuiz extends Component {
                 case "5":
                     break;
             }
+
+            //add the question to the qBank
+            qBank.push({
+                question: operand2.toString() + operation + operand1.toString(),
+                answers: options.sort(() => 0.5 - Math.random()).slice(0, totalAnswerOptions),
+                correct: answer.toString(),
+                questionId: i.toString(),
+                operand1: operand1.toString(),
+                operand2: operand2.toString(),
+                operation: operation.toString(),
+            });
         }
         
         //set the questions bank to the generated questions and set the quizSetup flag as true
@@ -155,7 +218,6 @@ class MathQuiz extends Component {
 
     //reset the state when the user wants to play again.
     playAgain = () => {
-        this.getQuestions();
         this.setState({
             quizSetup: false,
             score: 0,
@@ -189,11 +251,15 @@ class MathQuiz extends Component {
                 && this.state.questionBank.length > 0 
                 && this.state.responses < this.state.questionCount 
                 && this.state.questionBank.map(
-                    ({question, answers, correct, questionId}) => (
-                        <QuestionBoxMultipleChoice question={question} 
-                        options={answers} 
-                        key={questionId}
-                        selected={answer => this.computeAnswer(question, answer, correct)}
+                    ({question, answers, correct, questionId, operand1, operand2, operation}) => (
+                        <QuestionBoxMultipleChoice 
+                            operand1={operand1}
+                            operand2={operand2}
+                            operator={operation}
+                            question={question} 
+                            options={answers} 
+                            key={questionId}
+                            selected={answer => this.computeAnswer(question, answer, correct)}
                          />
                     )
                 )};
