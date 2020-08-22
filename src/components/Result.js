@@ -5,15 +5,13 @@ const Result = ({score, questionCount, answerLog, playAgain}) => {
 
     <div>
         <div className="score-board">
-            <div className="score">You scored {score} / {questionCount} correct answers!</div>
-            <button className="playBtn" onClick={playAgain}>
-                Play Again!
-            </button>
+            <div className="score">You scored {score}/{questionCount} correct answers!</div>
+        
             <table className="tableScore">
                 <tr>
                     <th>Question</th>
-                    <th>Correct Answer</th>
-                    <th>Your Answer</th>
+                    <th>Correct</th>
+                    <th>Selected</th>
                 </tr>
                 {answerLog.map(({question, answer, correctAnswer, isCorrect}) => (
                 <tr className={isCorrect.valueOf() ? 'correctAnswer' : 'incorrectAnswer'}>
@@ -23,6 +21,10 @@ const Result = ({score, questionCount, answerLog, playAgain}) => {
                 </tr>
                 ))}
             </table>
+
+            <button className="playBtn" onClick={playAgain}>
+                Play Again!
+            </button>
         </div>
     </div>
     )};
