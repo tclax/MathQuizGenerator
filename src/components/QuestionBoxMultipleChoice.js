@@ -5,7 +5,7 @@ const QuestionBoxMultipleChoice = ({question, options, operand1, operand2, opera
 
     return(
         <div className="questionBox">
-            <span class="equation stacked">
+            <span className="equation stacked">
                             <span class="number">{operand2}</span>
                             <span class="operator">{operator}</span>
                             <span class="number">{operand1}</span>

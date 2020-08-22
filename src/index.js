@@ -5,6 +5,7 @@ import quizService from "./quizService";
 import QuestionBoxMultipleChoice from "./components/QuestionBoxMultipleChoice";
 import Result from "./components/Result";
 import GradeLevelButton from "./components/GradeLevelButton";
+import QuizStopwatch from "./components/QuizStopwatch";
 
 class MathQuiz extends Component {
     state = {
@@ -124,7 +125,6 @@ class MathQuiz extends Component {
 
                     options.push(answer.toString());
                     break;
-                    break;
                 case "3":
                     break;
                 case "4":
@@ -232,42 +232,64 @@ class MathQuiz extends Component {
     }
 
     render() {
+
+        //Grade Selection container
+        let gradeSelectionContainer;
+        if(!this.state.quizSetup) {
+            gradeSelectionContainer = 
+            <div>
+                <div className="subTitle">Select a grade level:</div>
+                {this.state.availableGradeLevels.map((grade) => (
+                     <GradeLevelButton key={grade.gradeLevelId} gradeLevelText={grade.gradeLevelText}
+                    gradeLevelCode={grade.gradeLevelCode}
+                    gradeLevelId={grade.gradeLevelId}
+                    gradeSelected={gradeLevel => this.gradeSelected(gradeLevel)} />))
+                }
+            </div>
+        }
+
+        let quizQuestionsContainer;
+        let quizStopwatch = <QuizStopwatch/>
+        quizStopw
+        if(this.state.quizSetup
+            && this.state.questionBank.length > 0 
+            && this.state.responses < this.state.questionCount) {
+                quizQuestionsContainer = 
+            <div>               
+                {quizStopwatch}
+                {this.state.questionBank.map(
+                ({question, answers, correct, questionId, operand1, operand2, operation}) => (
+                    <QuestionBoxMultipleChoice 
+                        operand1={operand1}
+                        operand2={operand2}
+                        operator={operation}
+                        question={question} 
+                        options={answers} 
+                        key={questionId}
+                        selected={answer => this.computeAnswer(question, answer, correct)}
+                     />
+                )
+            )};
+            </div>
+            
+        }
+
+        let resultsContainer;
+        if(this.state.responses === this.state.questionCount){
+            resultsContainer = <Result score={this.state.score} questionCount={this.state.questionCount} answerLog={this.state.answerLog} playAgain={this.playAgain} />
+        }
+
+
         return (           
             <div className="container">
                 {/* Main div to hold the quiz */}
-                <div className="title">Perfect Practice: Math Quiz</div>
+                <div className="title">Perfect Practice</div>
 
-                {/* Setup to allow the user to select a grade level to generate a quiz based off the selection */}
-                {!this.state.quizSetup &&
-                 this.state.availableGradeLevels.map((grade) => (
-                    <GradeLevelButton key={grade.gradeLevelId} gradeLevelText={grade.gradeLevelText}
-                        gradeLevelCode={grade.gradeLevelCode}
-                        gradeLevelId={grade.gradeLevelId}
-                        gradeSelected={gradeLevel => this.gradeSelected(gradeLevel)} />
-                ))};
+                {gradeSelectionContainer}
 
-                {/* Generate the quiz questions based on the grade level selected */}
-                {this.state.quizSetup
-                && this.state.questionBank.length > 0 
-                && this.state.responses < this.state.questionCount 
-                && this.state.questionBank.map(
-                    ({question, answers, correct, questionId, operand1, operand2, operation}) => (
-                        <QuestionBoxMultipleChoice 
-                            operand1={operand1}
-                            operand2={operand2}
-                            operator={operation}
-                            question={question} 
-                            options={answers} 
-                            key={questionId}
-                            selected={answer => this.computeAnswer(question, answer, correct)}
-                         />
-                    )
-                )};
+                {quizQuestionsContainer}
                 
-                {/* Show the results component once the all quiz questions are answered */}
-                {this.state.responses === this.state.questionCount ? (
-                  <Result score={this.state.score} questionCount={this.state.questionCount} answerLog={this.state.answerLog} playAgain={this.playAgain} />
-                ) : null}
+                {resultsContainer}
             </div>
         );
     }
