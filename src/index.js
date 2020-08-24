@@ -16,6 +16,9 @@ class MathQuiz extends Component {
         answerLog: [],
         quizSetup: false,
         availableGradeLevels: [],
+        timerTime: 0,
+        timerOn: false,
+        timerStart: 0,
     };
 
     //Rules for generating quiz questions:
@@ -56,7 +59,6 @@ class MathQuiz extends Component {
                     while(optionsCount < totalAnswerOptions - 1){
                         var option = answer + Math.floor((Math.random() * answerVariance) + 1);
                         if(!options.includes(option)){
-                            console.log('adding ' + option.toString());
                             options.push(option);
                             optionsCount++;
                         }
@@ -91,7 +93,6 @@ class MathQuiz extends Component {
                     while(optionsCount < totalAnswerOptions - 1){
                         var option = answer + Math.floor((Math.random() * answerVariance) + 1);
                         if(!options.includes(option)){
-                            console.log('adding ' + option.toString());
                             options.push(option);
                             optionsCount++;
                         }
@@ -117,7 +118,6 @@ class MathQuiz extends Component {
                     while(optionsCount < totalAnswerOptions - 1){
                         var option = answer + Math.floor((Math.random() * answerVariance) + 1);
                         if(!options.includes(option)){
-                            console.log('adding ' + option.toString());
                             options.push(option);
                             optionsCount++;
                         }
@@ -150,6 +150,8 @@ class MathQuiz extends Component {
             questionBank: qBank,       
             quizSetup: true,
         });
+
+        this.startTimer();
        
     };
 
@@ -226,6 +228,36 @@ class MathQuiz extends Component {
         });
     };
 
+    startTimer = () => {
+        this.setState({
+            timerOn: true,
+            timerTime: this.state.timerTime,
+            timerStart: Date.now() - this.state.timerStart
+        });
+
+        this.timer = setInterval(() => {
+
+            this.setState( {
+                timerTime: Date.now - this.state.timerStart
+            });
+        }, 10);
+    };
+
+    stopTimer = () => {
+        this.setState({
+            timerOn: false
+        });
+
+        clearInterval(this.timer);
+    };
+
+    resetTimer = () => {
+        this.setTimer({
+            timerStart: 0,
+            timerTime: 0,
+        });
+    };
+
     // Show the GradeLevelButton component after mount
     componentDidMount() {      
         this.getAvailableGradeLevels();
@@ -249,8 +281,7 @@ class MathQuiz extends Component {
         }
 
         let quizQuestionsContainer;
-        let quizStopwatch = <QuizStopwatch/>
-        quizStopw
+        let quizStopwatch = <QuizStopwatch timerTime={this.state.timerTime} timerOn={this.state.timerOn} timerStart={this.timerStart} timerStop={this.timerStop}/>       
         if(this.state.quizSetup
             && this.state.questionBank.length > 0 
             && this.state.responses < this.state.questionCount) {

@@ -6,10 +6,10 @@ const QuestionBoxMultipleChoice = ({question, options, operand1, operand2, opera
     return(
         <div className="questionBox">
             <span className="equation stacked">
-                            <span class="number">{operand2}</span>
-                            <span class="operator">{operator}</span>
-                            <span class="number">{operand1}</span>
-                            <span class="equals">=</span>
+                            <span className="number">{operand2}</span>
+                            <span className="operator">{operator}</span>
+                            <span className="number">{operand1}</span>
+                            <span className="equals">=</span>
             </span>
             <br/>
             {answer.map((text, index) => (
