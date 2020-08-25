@@ -1,75 +1,22 @@
-// import React, { Component } from "react";
+import React from 'react';
 
-// class QuizStopwatch extends Component {
-//   state = {
-//     timerOn: false,
-//     timerStart: 0,
-//     timerTime: 0
-//   };
+const QuizStopwatch = (props) => {
 
-//   startTimer = () => {
-//     this.setState({
-//       timerOn: true,
-//       timerTime: this.state.timerTime,
-//       timerStart: Date.now() - this.state.timerTime
-//     });
-//     this.timer = setInterval(() => {
-//       this.setState({
-//         timerTime: Date.now() - this.state.timerStart
-//       });
-//     }, 10);
-//   };
+  let centiseconds = ("0" + (Math.floor(props.timerTime / 10) % 100)).slice(-2);
+  let seconds = ("0" + (Math.floor(props.timerTime / 1000) % 60)).slice(-2);
+  let minutes = ("0" + (Math.floor(props.timerTime / 60000) % 60)).slice(-2);
+  let hours = ("0" + Math.floor(props.timerTime / 3600000)).slice(-2);
 
-//   stopTimer = () => {
-//     this.setState({ timerOn: false });
-//     clearInterval(this.timer);
-//   };
+  // console.log('timerTime: ' + props.timerTime); 
+  // console.log('centiseconds: ' + centiseconds); 
+  // console.log('seconds: ' + seconds); 
+  // console.log('minutes: ' + minutes); 
+  // console.log('hours: ' + hours); 
+  return(
+    <div className="stopwatch-display">
+      {hours} : {minutes} : {seconds} : {centiseconds}
+    </div>
+  )
+}
 
-//   resetTimer = () => {
-//     this.setState({
-//       timerStart: 0,
-//       timerTime: 0
-//     });
-//   };
-
-//   render() {
-//     const { timerTime } = this.state;
-//     let centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
-//     let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
-//     let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
-//     let hours = ("0" + Math.floor(timerTime / 3600000)).slice(-2);
-
-//     return (
-//       <div className="Stopwatch">
-//         <div className="Stopwatch-header">Stopwatch</div>
-//         <div className="Stopwatch-display">
-//           {hours} : {minutes} : {seconds} : {centiseconds}
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// export default QuizStopwatch;
-
-
-import React, {useState} from "react";
-
-const QuizStopwatch = ({timerTime, timerOn, startTimer, stopTimer}) => {
-    //const [answer, setAnswer] = useState(options);
-
-    let centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
-    let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
-    let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
-    let hours = ("0" + Math.floor(timerTime / 3600000)).slice(-2);
-    return (
-              <div className="stopwatch">
-                <div className="stopwatch-header">Stopwatch</div>
-                <div className="stopwatch-display">
-                  {hours} : {minutes} : {seconds} : {centiseconds}
-                </div>
-              </div>
-            );
-};
-
-export default QuizStopwatch;
+export default QuizStopwatch

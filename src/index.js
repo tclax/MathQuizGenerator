@@ -12,7 +12,7 @@ class MathQuiz extends Component {
         questionBank: [],
         score: 0,
         responses: 0,
-        questionCount: 10,
+        questionCount: 3,
         answerLog: [],
         quizSetup: false,
         availableGradeLevels: [],
@@ -149,9 +149,8 @@ class MathQuiz extends Component {
         this.setState({     
             questionBank: qBank,       
             quizSetup: true,
+            timerTime: 0,
         });
-
-        this.startTimer();
        
     };
 
@@ -188,6 +187,7 @@ class MathQuiz extends Component {
     gradeSelected = (gradeLevel) => {
         console.log(gradeLevel + ' grade level was selected');
         this.getQuestions(gradeLevel);
+        this.startTimer();
     }
 
     //Compares the user answer with the correct answer, adds to the user score running total if correct.
@@ -216,10 +216,18 @@ class MathQuiz extends Component {
         this.setState({
             responses: this.state.responses < this.state.questionCount ? this.state.responses + 1 : this.state.questionCount
         });
+
+        console.log('responses: ' + this.state.responses);
+        console.log('question count: ' + this.state.questionCount);
+        if(this.state.responses === this.state.questionCount - 1){
+            this.stopTimer();
+        }
     };
 
     //reset the state when the user wants to play again.
     playAgain = () => {
+        this.stopTimer();
+        this.resetTimer();
         this.setState({
             quizSetup: false,
             score: 0,
@@ -230,33 +238,29 @@ class MathQuiz extends Component {
 
     startTimer = () => {
         this.setState({
-            timerOn: true,
-            timerTime: this.state.timerTime,
-            timerStart: Date.now() - this.state.timerStart
+          timerOn: true,
+          timerTime: this.state.timerTime,
+          timerStart: Date.now() - this.state.timerTime
         });
-
         this.timer = setInterval(() => {
-
-            this.setState( {
-                timerTime: Date.now - this.state.timerStart
-            });
+          this.setState({
+            timerTime: Date.now() - this.state.timerStart
+          });
         }, 10);
-    };
-
-    stopTimer = () => {
-        this.setState({
-            timerOn: false
-        });
-
+      };
+    
+      stopTimer = () => {
+        this.setState({ timerOn: false });
         clearInterval(this.timer);
-    };
-
-    resetTimer = () => {
-        this.setTimer({
-            timerStart: 0,
-            timerTime: 0,
+      };
+    
+      resetTimer = () => {
+        this.setState({
+          timerStart: 0,
+          timerTime: 0
         });
-    };
+      };
+    
 
     // Show the GradeLevelButton component after mount
     componentDidMount() {      
@@ -281,7 +285,7 @@ class MathQuiz extends Component {
         }
 
         let quizQuestionsContainer;
-        let quizStopwatch = <QuizStopwatch timerTime={this.state.timerTime} timerOn={this.state.timerOn} timerStart={this.timerStart} timerStop={this.timerStop}/>       
+        let quizStopwatch = <QuizStopwatch timerTime={this.state.timerTime} />       
         if(this.state.quizSetup
             && this.state.questionBank.length > 0 
             && this.state.responses < this.state.questionCount) {
@@ -307,7 +311,7 @@ class MathQuiz extends Component {
 
         let resultsContainer;
         if(this.state.responses === this.state.questionCount){
-            resultsContainer = <Result score={this.state.score} questionCount={this.state.questionCount} answerLog={this.state.answerLog} playAgain={this.playAgain} />
+            resultsContainer = <Result score={this.state.score} questionCount={this.state.questionCount} answerLog={this.state.answerLog} timerTime={this.state.timerTime} playAgain={this.playAgain} />
         }
 
 
@@ -319,7 +323,6 @@ class MathQuiz extends Component {
                 {gradeSelectionContainer}
 
                 {quizQuestionsContainer}
-                
                 {resultsContainer}
             </div>
         );
