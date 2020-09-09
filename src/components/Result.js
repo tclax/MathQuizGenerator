@@ -1,6 +1,6 @@
 import React from "react";
 
-const Result = ({score, questionCount, answerLog, timerTime, playAgain}) => {
+const Result = ({score, questionCount, answerLog, timerTime, playAgain, retryQuiz}) => {
 
     let centiseconds = Math.floor(timerTime / 10) % 100;
     let seconds = Math.floor(timerTime / 1000) % 60;
@@ -8,12 +8,24 @@ const Result = ({score, questionCount, answerLog, timerTime, playAgain}) => {
     let hours = Math.floor(timerTime / 3600000);
 
     let scoreResult;
+    let buttonsContainer;
     if(score === questionCount) {
-        scoreResult = <div className="score">Perfect score! You completed the quiz perfectly in {seconds} seconds.</div>
+        scoreResult = <div className="score">Perfect score! You completed the quiz with a time of {hours} : {minutes} : {seconds} : {centiseconds}</div>
+        buttonsContainer =  
+            <div>
+                <button className="playBtn" onClick={playAgain}>New Quiz</button>
+            </div>
     }
     else {
-        scoreResult = <div className="score">You scored {score}/{questionCount} correct answers!</div>
+        scoreResult = <div className="score">Score: {score}/{questionCount}</div>
+        buttonsContainer =  
+            <div>
+                <button className="playBtn" onClick={retryQuiz}>Retry</button>
+                <button className="playBtn" onClick={playAgain}>New Quiz</button>
+            </div>
     }
+
+    
 
     return (
 
@@ -37,9 +49,7 @@ const Result = ({score, questionCount, answerLog, timerTime, playAgain}) => {
                 ))}
             </table>
 
-            <button className="playBtn" onClick={playAgain}>
-                Play Again!
-            </button>
+            {buttonsContainer}
         </div>
     </div>
     )};

@@ -6,6 +6,7 @@ import QuestionBoxMultipleChoice from "./components/QuestionBoxMultipleChoice";
 import Result from "./components/Result";
 import GradeLevelButton from "./components/GradeLevelButton";
 import QuizStopwatch from "./components/QuizStopwatch";
+import QuestionBoxNumericEntry from "./components/QuestionBoxNumericEnry";
 
 class MathQuiz extends Component {
     state = {
@@ -192,6 +193,7 @@ class MathQuiz extends Component {
 
     //Compares the user answer with the correct answer, adds to the user score running total if correct.
     computeAnswer = (question, answer, correctAnswer) => {
+        console.log('User answer for ' + question + " " + answer);
         if(answer === correctAnswer) {
             this.setState(prevState => ({           
                 score: this.state.score + 1,
@@ -236,6 +238,18 @@ class MathQuiz extends Component {
         });
     };
 
+    //Retry the current quiz. Shuffle the questions and the options again so its not the same exact quiz.
+    retryQuiz = () => {
+        this.resetTimer();
+        this.setState({
+            score: 0,
+            responses: 0,
+            answerLog: []
+        });
+        this.startTimer();      
+    };
+
+
     startTimer = () => {
         this.setState({
           timerOn: true,
@@ -255,10 +269,13 @@ class MathQuiz extends Component {
       };
     
       resetTimer = () => {
-        this.setState({
-          timerStart: 0,
-          timerTime: 0
-        });
+        (async () => {
+            await this.setState({
+                timerStart: 0,
+                timerTime: 0,
+              });
+        })();
+            
       };
     
 
@@ -303,15 +320,26 @@ class MathQuiz extends Component {
                         key={questionId}
                         selected={answer => this.computeAnswer(question, answer, correct)}
                      />
-                )
-            )};
+                ))}
+                <br/>
+                {/* {this.state.questionBank.map(
+                ({question, answers, correct, questionId, operand1, operand2, operation}) => (
+                    <QuestionBoxNumericEntry 
+                        operand1={operand1}
+                        operand2={operand2}
+                        operator={operation}
+                        question={question} 
+                        key={questionId}
+                        selected={answer => this.computeAnswer(question, answer, correct)}
+                     />
+                ))} */}
             </div>
             
         }
 
         let resultsContainer;
         if(this.state.responses === this.state.questionCount){
-            resultsContainer = <Result score={this.state.score} questionCount={this.state.questionCount} answerLog={this.state.answerLog} timerTime={this.state.timerTime} playAgain={this.playAgain} />
+            resultsContainer = <Result score={this.state.score} questionCount={this.state.questionCount} answerLog={this.state.answerLog} timerTime={this.state.timerTime} playAgain={this.playAgain} retryQuiz={this.retryQuiz}/>
         }
 
 
