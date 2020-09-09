@@ -12,7 +12,7 @@ const QuestionBoxNumericEntry = ({question, operand1, operand2, operator, userAn
                             <span className="equals">=</span>
             </span>
             <br/>
-            <input inputmode="numeric" value={answer} onInput={e => selected(e.target.value)} />
+            <input inputmode="numeric" pattern="[0-9]*" type="text" value={answer} onBlur={e => selected(e.target.value)} />
         </div>
     );
 };

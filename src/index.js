@@ -309,7 +309,7 @@ class MathQuiz extends Component {
                 quizQuestionsContainer = 
             <div>               
                 {quizStopwatch}
-                {this.state.questionBank.map(
+                {/* {this.state.questionBank.map(
                 ({question, answers, correct, questionId, operand1, operand2, operation}) => (
                     <QuestionBoxMultipleChoice 
                         operand1={operand1}
@@ -320,9 +320,9 @@ class MathQuiz extends Component {
                         key={questionId}
                         selected={answer => this.computeAnswer(question, answer, correct)}
                      />
-                ))}
+                ))} */}
                 <br/>
-                {/* {this.state.questionBank.map(
+                {this.state.questionBank.map(
                 ({question, answers, correct, questionId, operand1, operand2, operation}) => (
                     <QuestionBoxNumericEntry 
                         operand1={operand1}
@@ -332,7 +332,7 @@ class MathQuiz extends Component {
                         key={questionId}
                         selected={answer => this.computeAnswer(question, answer, correct)}
                      />
-                ))} */}
+                ))}
             </div>
             
         }
