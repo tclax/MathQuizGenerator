@@ -192,15 +192,15 @@ class MathQuiz extends Component {
     }
 
     //Compares the user answer with the correct answer, adds to the user score running total if correct.
-    computeAnswer = (question, answer, correctAnswer) => {
-        console.log('User answer for ' + question + " " + answer);
-        if(answer === correctAnswer) {
+    computeAnswer = (questionId, answer) => {
+        var currentQuestion = this.state.questionBank[questionId];
+        if(answer === currentQuestion.correct) {
             this.setState(prevState => ({           
                 score: this.state.score + 1,
                 answerLog: [...prevState.answerLog, {
-                    question: question,
+                    question: currentQuestion.question,
                     answer: answer,
-                    correctAnswer: correctAnswer,
+                    correctAnswer: currentQuestion.correct,
                     isCorrect: true,}
                 ],
             }));          
@@ -208,9 +208,9 @@ class MathQuiz extends Component {
         else {
             this.setState(prevState => ({           
                 answerLog: [...prevState.answerLog, {
-                    question: question,
+                    question: currentQuestion.question,
                     answer: answer,
-                    correctAnswer: correctAnswer,
+                    correctAnswer: currentQuestion.correct,
                     isCorrect: false,}
                 ],
             }));
@@ -219,8 +219,6 @@ class MathQuiz extends Component {
             responses: this.state.responses < this.state.questionCount ? this.state.responses + 1 : this.state.questionCount
         });
 
-        console.log('responses: ' + this.state.responses);
-        console.log('question count: ' + this.state.questionCount);
         if(this.state.responses === this.state.questionCount - 1){
             this.stopTimer();
         }
@@ -330,7 +328,7 @@ class MathQuiz extends Component {
                         operator={operation}
                         question={question} 
                         key={questionId}
-                        selected={answer => this.computeAnswer(question, answer, correct)}
+                        selected={answer => this.computeAnswer(questionId, answer)}
                      />
                 ))}
             </div>
