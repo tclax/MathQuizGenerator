@@ -6,7 +6,7 @@ import QuestionBoxMultipleChoice from "./components/QuestionBoxMultipleChoice";
 import Result from "./components/Result";
 import GradeLevelButton from "./components/GradeLevelButton";
 import QuizStopwatch from "./components/QuizStopwatch";
-import QuestionBoxNumericEntry from "./components/QuestionBoxNumericEnry";
+import QuestionBoxNumericEntry from "./components/QuestionBoxNumeric";
 
 class MathQuiz extends Component {
     state = {
@@ -344,10 +344,8 @@ class MathQuiz extends Component {
         return (           
             <div className="container">
                 {/* Main div to hold the quiz */}
-                <div className="title">Perfect Practice</div>
-
+                <div className="title">Perfect Practice: Blitz</div>
                 {gradeSelectionContainer}
-
                 {quizQuestionsContainer}
                 {resultsContainer}
             </div>

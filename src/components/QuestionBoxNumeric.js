@@ -14,7 +14,15 @@ const QuestionBoxNumericEntry = ({question, operand1, operand2, operator, userAn
                     setIsAnswered(true);
                     setAnswer(e.target.value);
                 }}
-            }  
+            }
+            onMouseLeave={e => {
+                //only submit the answer if its non null or empty and if the keydown is either enter or tab 
+                if (e.target.value) {
+                    selected(e.target.value);
+                    setIsAnswered(true);
+                    setAnswer(e.target.value);
+                }}
+            }
         />
     }
     else {
